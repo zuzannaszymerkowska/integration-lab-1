@@ -1,4 +1,4 @@
-# Projekt Laboratorium 1
+# Projekt Lab 1 - Zmiana lokalna
 Celem tego laboratorium jest **opanowanie Gita oraz Django**.
 
 ### Wymagania:
