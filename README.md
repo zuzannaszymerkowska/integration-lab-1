@@ -12,3 +12,6 @@ Celem tego laboratorium jest **opanowanie Gita oraz Django**.
 Komenda do startu: `python3 manage.py runserver`
 
 Więcej w [Dokumentacji Django](https://docs.djangoproject.com/)
+
+## Dokumentacja
+Projekt używa Django 4.2.
