@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>{{ object.title }}</title></head>
+<body>
+    <h1>{{ object.title }}</h1>
+    <p><strong>Autor:</strong> {{ object.author }}</p>
+    <p><strong>Opublikowano:</strong> {{ object.published_at }}</p>
+    <div>
+        {{ object.content|linebreaks }}
+    </div>
+    <br>
+    <a href="{% url 'post_list' %}">← Powrót do listy</a>
+</body>
+</html>

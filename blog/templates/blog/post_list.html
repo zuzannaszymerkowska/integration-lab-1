@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Mój Blog</title></head>
+<body>
+    <h1>Lista wpisów na blogu</h1>
+    <hr>
+    {% for post in posts %}
+        <article>
+            <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
+            <p>Autor: {{ post.author }} | Data: {{ post.published_at }}</p>
+            <p>{{ post.content|linebreaks }}</p>
+        </article>
+        <hr>
+    {% endfor %}
+</body>
+</html>
