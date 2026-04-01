@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head><meta charset="utf-8"><title>Pogoda Gdynia</title></head>
+<body>
+    <h1>Pogoda w Gdyni</h1>
+    {% if weather %}
+        <p>Temperatura: <strong>{{ weather.temperature }}°C</strong></p>
+        <p>Wiatr: {{ weather.windspeed }} km/h</p>
+    {% else %}
+        <p style="color:red">Brak danych pogodowych (sprawdź internet).</p>
+    {% endif %}
+    <hr><a href="/">Wróć do bloga</a>
+</body>
+</html>
