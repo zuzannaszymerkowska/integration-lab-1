@@ -9,3 +9,10 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
+
+from django.http import JsonResponse
+from .models import Post
+
+def api_posts(request):
+    posts = list(Post.objects.all().values('id', 'title', 'content'))
+    return JsonResponse(posts, safe=False)
