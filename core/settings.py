@@ -80,7 +80,8 @@ import os
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
+        # Jeśli DATABASE_URL jest pusta, użyj SQLite (bezpieczne dla testów)
+        default='sqlite:///db.sqlite3'
     )
 }
 

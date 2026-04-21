@@ -44,5 +44,6 @@ jobs:
         DB_NAME: django_db
         DB_USER: django_user
         DB_PASS: django_password
+	DATABASE_URL: sqlite:///db.sqlite3
       run: |
         python manage.py test
