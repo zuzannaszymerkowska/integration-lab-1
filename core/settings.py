@@ -3,7 +3,7 @@ import dj_database_url
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-q0x(w$7gen!62opp1$s9xjf1b=x2(ag0v0y(h5h)^88i&+xx9+'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key')
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
@@ -50,19 +50,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Twarde wymuszenie bazy danych dla Rendera
+# Konfiguracja bazy danych
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# Jeśli jesteśmy na Renderze, używamy Postgresa ze zmiennej DATABASE_URL
 if os.environ.get('RENDER'):
-    DATABASES = {
-        'default': dj_database_url.parse('postgresql://django_user:hMDbbbVF6xVKGfkJpkCty5eFwj0w2HhA@dpg-d7jot2v7f7vs73ef2frg-a.frankfurt-postgres.render.com/django_db_8bst')
-    }
-    DATABASES['default']['CONN_MAX_AGE'] = 600
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True
+    )
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
