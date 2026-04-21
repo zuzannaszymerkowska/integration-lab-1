@@ -77,13 +77,23 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 import dj_database_url
 import os
+from pathlib import Path
 
-DATABASES = {
-    'default': dj_database_url.config(
-        # Jeśli DATABASE_URL jest pusta, użyj SQLite (bezpieczne dla testów)
-        default='sqlite:///db.sqlite3'
-    )
-}
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Sprawdzamy, czy mamy zmienną DATABASE_URL (np. na Renderze)
+if os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+    }
+else:
+    # Jeśli nie ma zmiennej (np. podczas testów na GitHubie), użyj SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
