@@ -75,25 +75,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-import dj_database_url
 import os
 from pathlib import Path
+# Importuj dj_database_url na górze pliku, jeśli go używasz
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Sprawdzamy, czy mamy zmienną DATABASE_URL (np. na Renderze)
+# Skonfiguruj bazę tak, aby domyślnie zawsze była bezpieczna (SQLite)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# Tylko jeśli jesteśmy na Renderze (lub mamy ustawioną zmienną), nadpisz na Postgres
 if os.environ.get('DATABASE_URL'):
-    DATABASES = {
-        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
-    }
-else:
-    # Jeśli nie ma zmiennej (np. podczas testów na GitHubie), użyj SQLite
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
