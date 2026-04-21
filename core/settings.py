@@ -2,19 +2,11 @@ import os
 import dj_database_url
 from pathlib import Path
 
-# Ścieżka bazowa projektu
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# KLUCZ BEZPIECZEŃSTWA (na laboratorium może zostać ten)
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-q0x(w$7gen!62opp1$s9xjf1b=x2(ag0v0y(h5h)^88i&+xx9+')
-
-# DEBUG ustawiamy na True, żeby widzieć błędy w razie problemów
+SECRET_KEY = 'django-insecure-q0x(w$7gen!62opp1$s9xjf1b=x2(ag0v0y(h5h)^88i&+xx9+'
 DEBUG = True
-
-# Bardzo ważne: ALLOWED_HOSTS musi pozwalać Renderowi na wyświetlanie strony
 ALLOWED_HOSTS = ['*']
 
-# Definicja aplikacji
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,13 +21,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Dodane do obsługi plików statycznych
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -58,17 +50,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Znajdź i zastąp całą sekcję DATABASES tym:
-if os.environ.get('DATABASE_URL'):
-    # Jeśli jesteśmy na Renderze, używamy TYLKO tego:
+# Twarde wymuszenie bazy danych dla Rendera
+if os.environ.get('RENDER'):
     DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-            ssl_require=True
-        )
+        'default': dj_database_url.parse('postgresql://django_user:hMDbbbVF6xVKGfkJpkCty5eFwj0w2HhA@dpg-d7jot2v7f7vs73ef2frg-a.frankfurt-postgres.render.com/django_db_8bst')
     }
+    DATABASES['default']['CONN_MAX_AGE'] = 600
 else:
-    # Lokalnie na Macu lub w testach GitHub używamy SQLite:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
