@@ -55,3 +55,9 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Wymuszenie portu na sztywno dla Rendera
+import sys
+if 'runserver' in sys.argv:
+    from django.core.management.commands.runserver import Command as runserver
+    runserver.default_port = "10000"
